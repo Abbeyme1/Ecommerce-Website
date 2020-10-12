@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Row, Col, Image, ListGroup, Card, Button } from "react-bootstrap";
 import Rating from "../components/Rating/Rating";
-import products from "../products";
 
 const ProductScreen = ({ match }) => {
   // either use useParams or use match.params.id
-  const id = useParams();
+  const { id } = useParams();
   // console.log(id);
   // const product = products.find(p => p._id === match.params.id)
-  const product = products.find((p) => p._id == id.id);
-  console.log(product);
+
+  const [product, setProduct] = useState({});
+
+  useEffect(() => {
+    fetch(`/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setProduct(data);
+      });
+  }, [id]);
+
   return (
     <>
       <Link className="btn btn-light my-3" to="/">
