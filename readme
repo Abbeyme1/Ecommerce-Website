@@ -1,0 +1,2 @@
+1} we are not updating entire dom after we make changes in our profile 
+   as when name changes it appears unchanged in navbar
