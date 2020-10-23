@@ -7,6 +7,6 @@ import {
 
 //! with asyc awai method
 router.route("/").get(getProducts);
-router.route("/").get(getProductById);
+router.route("/:id").get(getProductById);
 
 export default router;
