@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import FormContainer from "../components/FormContainer/FormContainer";
@@ -36,7 +36,7 @@ const ShippingScreen = ({ history }) => {
           <Form.Control
             type="text"
             placeholder="Enter Address"
-            value={address}
+            value={address ? address : ""}
             required
             onChange={(e) => setAddress(e.target.value)}
           />
@@ -46,7 +46,7 @@ const ShippingScreen = ({ history }) => {
           <Form.Control
             type="text"
             placeholder="Enter City"
-            value={city}
+            value={city ? city : ""}
             required
             onChange={(e) => setCity(e.target.value)}
           />
@@ -56,7 +56,7 @@ const ShippingScreen = ({ history }) => {
           <Form.Control
             type="text"
             placeholder="Enter Postal Code"
-            value={postalCode}
+            value={postalCode ? postalCode : ""}
             required
             onChange={(e) => setPostalCode(e.target.value)}
           />
@@ -66,7 +66,7 @@ const ShippingScreen = ({ history }) => {
           <Form.Control
             type="text"
             placeholder="Enter Country"
-            value={country}
+            value={country ? country : ""}
             required
             onChange={(e) => setCountry(e.target.value)}
           />

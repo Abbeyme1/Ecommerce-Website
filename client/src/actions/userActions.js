@@ -1,4 +1,5 @@
 import * as constants from "../constants/userConstants.js";
+import * as constant from "../constants/orderConstants.js";
 import Axios from "axios";
 
 export const userLogin = (email, password) => {
@@ -34,13 +35,22 @@ export const userLogin = (email, password) => {
 };
 
 export const userLogout = () => {
+  localStorage.removeItem("userInfo");
+  localStorage.removeItem("cartItems");
+  localStorage.removeItem("shippingAddress");
+  localStorage.removeItem("paymentMethod");
   return (dispatch) => {
     dispatch({
       type: constants.USER_LOGOUT,
     });
-
-    localStorage.removeItem("userInfo");
+    dispatch({
+      type: constants.USER_DETAILS_RESET,
+    });
+    dispatch({
+      type: constant.ORDER_LIST_MY_RESET,
+    });
   };
+  document.location.href = "/login";
 };
 
 export const userRegister = (name, email, password) => {

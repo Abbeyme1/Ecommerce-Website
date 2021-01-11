@@ -10,6 +10,8 @@ const user = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
 
+
+  // mathPassword is in UserController
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,

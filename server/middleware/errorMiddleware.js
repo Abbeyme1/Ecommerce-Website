@@ -1,3 +1,5 @@
+
+// used when it is not in any actual route
 const notFound = (req, res, next) => {
   const error = new Error(`NOT FOUND - ${req.originalUrl}`);
   res.status(404);

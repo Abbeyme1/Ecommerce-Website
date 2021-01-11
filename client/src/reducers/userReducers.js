@@ -34,12 +34,14 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
       return { loading: false, user: action.payload };
     case constants.USER_DETAILS_FAIL:
       return { loading: false, error: action.payload };
+    case constants.USER_DETAILS_RESET:
+      return { user: {} };
     default:
       return state;
   }
 };
 
-export const userUpdateProfileReducer = (state = { user: {} }, action) => {
+export const userUpdateProfileReducer = (state = {}, action) => {
   switch (action.type) {
     case constants.USER_UPDATE_PROFILE_REQUEST:
       return { loading: true };

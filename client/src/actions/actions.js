@@ -1,5 +1,10 @@
 export { listProducts, listProductDetails } from "./productActions";
-export { addToCart, removeFromCart, saveShippingAddress } from "./cartActions";
+export {
+  addToCart,
+  removeFromCart,
+  saveShippingAddress,
+  savePaymentMethod,
+} from "./cartActions";
 export {
   userLogin,
   userLogout,
@@ -7,3 +12,10 @@ export {
   getUserDetails,
   updateUserProfile,
 } from "./userActions";
+
+export {
+  createOrder,
+  orderDetails,
+  payOrder,
+  listMyOrders,
+} from "./orderActions";
