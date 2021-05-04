@@ -60,7 +60,7 @@ const OrderScreen = ({ match }) => {
 
   useEffect(() => {
     dispatch(actions.orderDetails(orderId));
-  }, [orderId]);
+  }, [dispatch, orderId]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(actions.payOrder(orderId, paymentResult));
@@ -155,6 +155,12 @@ const OrderScreen = ({ match }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
+                  <Col>{order.orderItems.length}</Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Price</Col>
                   <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>

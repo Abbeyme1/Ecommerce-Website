@@ -10,7 +10,6 @@ const user = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email: email });
 
-
   // mathPassword is in UserController
   if (user && (await user.matchPassword(password))) {
     res.json({
@@ -108,4 +107,66 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-export { user, getUserProfile, registerUser, updateUserProfile };
+//? @desc   GET USERS
+//? @route  GET /api/users/profile/
+//? @desc   PRIVATE/Admin
+
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (user) {
+    await user.remove();
+    res.json({ message: "User Removed" });
+  } else {
+    res.status(404);
+    throw new Error("User Not Found");
+  }
+});
+
+const getUserById = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findById(id).select("-password");
+  if (user) res.json(user);
+  else {
+    res.status(404);
+    throw new Error("User Not Found");
+  }
+});
+
+const updateUser = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const user = await User.findById(id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
+
+    user.save().then((user) => {
+      res.json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      });
+    });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+export {
+  user,
+  getUserProfile,
+  registerUser,
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+  getUserById,
+  updateUser,
+};

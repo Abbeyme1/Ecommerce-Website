@@ -11,6 +11,9 @@ export {
   userRegister,
   getUserDetails,
   updateUserProfile,
+  listUsers,
+  deleteUser,
+  updateUser,
 } from "./userActions";
 
 export {
