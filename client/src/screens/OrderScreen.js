@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { ListGroup, Row, Col, Image, Card } from "react-bootstrap";
+import {
+  ListGroup,
+  Row,
+  Col,
+  Image,
+  Card,
+  Button,
+  Badge,
+} from "react-bootstrap";
 import Axios from "axios";
 import { PayPalButton } from "react-paypal-button-v2";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,8 +15,12 @@ import Message from "../components/Message/Message";
 import * as actions from "../actions/actions";
 import Loader from "../components/Loader/Loader";
 import { Link } from "react-router-dom";
-import { ORDER_PAY_RESET } from "../constants/orderConstants";
-const OrderScreen = ({ match }) => {
+import Meta from "../components/Meta/Meta";
+import {
+  ORDER_PAY_RESET,
+  ORDER_DELIVER_RESET,
+} from "../constants/orderConstants";
+const OrderScreen = ({ match, history }) => {
   const dispatch = useDispatch();
   const orderId = match.params.id;
 
@@ -17,6 +29,12 @@ const OrderScreen = ({ match }) => {
 
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
   if (!loading) {
     if (order) {
@@ -29,6 +47,8 @@ const OrderScreen = ({ match }) => {
   const [sdkReady, setSdkReady] = useState(false);
 
   useEffect(() => {
+    if (!userInfo) history.push("/login");
+
     // window.location.reload(false)
     const addPayPalScript = async () => {
       const { data: clientId } = await Axios.get("/api/config/paypal");
@@ -43,9 +63,10 @@ const OrderScreen = ({ match }) => {
       document.body.appendChild(script);
     };
 
-    if (successPay || !order) {
+    if (successPay || !order || successDeliver) {
       // console.log("Reseting ");
       dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(actions.orderDetails(orderId));
     } else if (!order.isPaid) {
       // console.log(window.paypal);
@@ -56,7 +77,7 @@ const OrderScreen = ({ match }) => {
         setSdkReady(true);
       }
     }
-  }, [match, orderId, dispatch, successPay, order]);
+  }, [match, orderId, dispatch, successPay, order, successDeliver, userInfo]);
 
   useEffect(() => {
     dispatch(actions.orderDetails(orderId));
@@ -66,12 +87,17 @@ const OrderScreen = ({ match }) => {
     dispatch(actions.payOrder(orderId, paymentResult));
   };
 
+  const deliverHandler = () => {
+    dispatch(actions.deliverOrder(order));
+  };
+
   return loading ? (
     <Loader />
   ) : error ? (
     <Message variant="danger">{error}</Message>
   ) : (
     <>
+      <Meta title="Order" />
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
@@ -95,7 +121,7 @@ const OrderScreen = ({ match }) => {
 
               {order.isDelivered ? (
                 <Message variant="success">
-                  Delivered on {order.deliveredAt}
+                  Delivered on {order.deliveredAt.substring(0, 10)}
                 </Message>
               ) : (
                 <Message variant="danger">Not Delivered</Message>
@@ -108,7 +134,9 @@ const OrderScreen = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant="success">Paid on {order.paidAt}</Message>
+                <Message variant="success">
+                  Paid on {order.paidAt.substring(0, 10)}
+                </Message>
               ) : (
                 <Message variant="danger">Not Paid</Message>
               )}
@@ -179,7 +207,17 @@ const OrderScreen = ({ match }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${order.totalPrice}</Col>
+                  <Col>
+                    <Badge
+                      style={{
+                        backgroundColor: "#4BB543",
+                        color: "white",
+                        fontSize: "1.2rem",
+                      }}
+                    >
+                      ${order.totalPrice}
+                    </Badge>
+                  </Col>
                 </Row>
               </ListGroup.Item>
               {!order.isPaid && (
@@ -195,6 +233,22 @@ const OrderScreen = ({ match }) => {
                   )}
                 </ListGroup.Item>
               )}
+              {loadingDeliver && <Loader />}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type="button"
+                      className="btn btn-block"
+                      onClick={deliverHandler}
+                      variant="info"
+                    >
+                      Mark As Delivered
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>

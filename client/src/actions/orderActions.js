@@ -2,7 +2,7 @@ import Axios from "axios";
 import * as constants from "../constants/orderConstants";
 
 export const createOrder = (order) => {
-  // console.log("Order ", order);
+  console.log("Order ", order);
   return (dispatch, getState) => {
     dispatch({
       type: constants.ORDER_CREATE_REQEUST,
@@ -21,21 +21,23 @@ export const createOrder = (order) => {
     };
 
     Axios.post("/api/orders", order, config)
-      .then((response) =>
+      .then((response) => {
+        console.log("REs", response);
         dispatch({
           type: constants.ORDER_CREATE_SUCCESS,
           payload: response.data,
-        }),
-      )
-      .catch((error) =>
+        });
+      })
+      .catch((error) => {
+        console.log("err", error);
         dispatch({
           type: constants.ORDER_CREATE_FAIL,
           payload:
             error.response && error.response.data.message
               ? error.response.data.message
               : error.message,
-        }),
-      );
+        });
+      });
   };
 };
 
@@ -137,6 +139,78 @@ export const listMyOrders = () => {
       .catch((error) => {
         dispatch({
           type: constants.ORDER_LIST_MY_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        });
+      });
+  };
+};
+
+export const listOrders = () => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: constants.ORDER_LIST_REQEUST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    Axios.get(`/api/orders/`, config)
+      .then((response) => {
+        dispatch({
+          type: constants.ORDER_LIST_SUCCESS,
+          payload: response.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: constants.ORDER_LIST_FAIL,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        });
+      });
+  };
+};
+
+export const deliverOrder = (order) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: constants.ORDER_DELIVER_REQEUST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    // passing empty object is mandatory
+    Axios.put(`/api/orders/${order._id}/deliver`, {}, config)
+      .then((response) => {
+        dispatch({
+          type: constants.ORDER_DELIVER_SUCCESS,
+          payload: response.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: constants.ORDER_DETAILS_FAIL,
           payload:
             error.response && error.response.data.message
               ? error.response.data.message

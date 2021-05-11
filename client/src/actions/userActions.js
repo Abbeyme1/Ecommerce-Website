@@ -52,8 +52,8 @@ export const userLogout = () => {
     dispatch({
       type: constants.USER_LIST_RESET,
     });
+    document.location.href = "/login";
   };
-  document.location.href = "/login";
 };
 
 export const userRegister = (name, email, password) => {

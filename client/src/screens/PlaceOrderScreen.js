@@ -1,10 +1,19 @@
 import React, { useEffect } from "react";
-import { ListGroup, Row, Col, Image, Card, Button } from "react-bootstrap";
+import {
+  ListGroup,
+  Row,
+  Col,
+  Image,
+  Card,
+  Button,
+  Badge,
+} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message/Message";
 import CheckoutSteps from "../components/CheckoutSteps/CheckoutSteps";
 import { Link } from "react-router-dom";
 import * as actions from "../actions/actions";
+import Meta from "../components/Meta/Meta";
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -49,6 +58,7 @@ const PlaceOrderScreen = ({ history }) => {
 
   return (
     <>
+      <Meta title="Place Order" />
       <CheckoutSteps step1 step2 step3 step4 />
       <Row>
         <Col md={8}>
@@ -91,7 +101,10 @@ const PlaceOrderScreen = ({ history }) => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} X ${item.price} = ${item.qty * item.price}
+                          {item.qty} X ${item.price} ={" "}
+                          <span style={{ fontWeight: "bold" }}>
+                            ${item.qty * item.price}
+                          </span>
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -128,13 +141,25 @@ const PlaceOrderScreen = ({ history }) => {
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>
+                    <Badge
+                      pill
+                      style={{
+                        fontSize: "1.2rem",
+                        backgroundColor: "#4BB543",
+                        color: "white",
+                      }}
+                    >
+                      ${cart.totalPrice}
+                    </Badge>
+                  </Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
               <Button
+                style={{ backgroundColor: "	#1E90FF" }}
                 type="button"
                 className="btn-block"
                 disabled={cart.cartItems === 0}

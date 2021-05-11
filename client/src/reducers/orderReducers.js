@@ -93,4 +93,48 @@ export const orderListMyReducer = (state = { orders: [] }, action) => {
   }
 };
 
+export const orderListReducer = (state = { orders: [] }, action) => {
+  switch (action.type) {
+    case constants.ORDER_LIST_REQEUST:
+      return {
+        loading: true,
+      };
+    case constants.ORDER_LIST_SUCCESS:
+      return {
+        loading: false,
+        orders: action.payload,
+      };
+    case constants.ORDER_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+export const orderDeliverReducer = (state = {}, action) => {
+  switch (action.type) {
+    case constants.ORDER_DELIVER_REQEUST:
+      return {
+        loading: true,
+      };
+    case constants.ORDER_DELIVER_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case constants.ORDER_DELIVER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case constants.ORDER_DELIVER_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 // orderlistmyreset is not used as already finded its sol. by usng another useEffect in orderScreeen

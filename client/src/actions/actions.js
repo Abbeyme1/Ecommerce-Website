@@ -1,4 +1,12 @@
-export { listProducts, listProductDetails } from "./productActions";
+export {
+  listProducts,
+  listProductDetails,
+  deleteProduct,
+  createProduct,
+  updateProduct,
+  createProductReview,
+  getTopRatedProducts,
+} from "./productActions";
 export {
   addToCart,
   removeFromCart,
@@ -21,4 +29,6 @@ export {
   orderDetails,
   payOrder,
   listMyOrders,
+  listOrders,
+  deliverOrder,
 } from "./orderActions";

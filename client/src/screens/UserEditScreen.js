@@ -7,6 +7,7 @@ import Loader from "../components/Loader/Loader";
 import FormContainer from "../components/FormContainer/FormContainer";
 import { getUserDetails, updateUser } from "../actions/actions";
 import { USER_UPDATE_RESET } from "../constants/userConstants";
+import Meta from "../components/Meta/Meta";
 
 const UserEditScreen = ({ match, history }) => {
   const id = match.params.id;
@@ -46,6 +47,7 @@ const UserEditScreen = ({ match, history }) => {
   };
   return (
     <>
+      <Meta title="Edit Profile" />
       <Link to="/admin/userlist" className="btn btn-light my-3">
         Go Back
       </Link>
@@ -87,7 +89,7 @@ const UserEditScreen = ({ match, history }) => {
               />
             </Form.Group>
 
-            <Button type="sumbit" variant="primary">
+            <Button type="sumbit" style={{ backgroundColor: "	#1E90FF" }}>
               Update
             </Button>
           </Form>
