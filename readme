@@ -1,5 +1,1 @@
-1} we are not updating entire dom after we make changes in our profile 
-   as when name changes it appears unchanged in navbar
 
-
-2) as we are admin , and we change our isAdmin=false,, it will not update in header(navbar)
